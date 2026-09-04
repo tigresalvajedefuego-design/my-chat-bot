@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой чат-бот</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat {
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            max-height: 800px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #222;
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 12px 15px;
+            border-radius: 15px;
+            max-width: 85%;
+            line-height: 1.4;
+        }
+
+        .bot {
+            background: #eeeeee;
+            align-self: flex-start;
+        }
+
+        .user {
+            background: #222;
+            color: white;
+            margin-left: auto;
+        }
+
+        .buttons {
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        button {
+            border: none;
+            padding: 13px;
+            border-radius: 10px;
+            background: #222;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            gap: 8px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .send {
+            width: 80px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="chat">
+
+    <div class="header">
+        Мой чат-бот
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="buttons" id="buttons"></div>
+
+    <div class="input-area">
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Напишите сообщение..."
+        >
+        <button class="send" onclick="sendMessage()">Отправить</button>
+    </div>
+
+</div>
+
+<script>
+
+const messages = document.getElementById("messages");
+const buttons = document.getElementById("buttons");
+const input = document.getElementById("userInput");
+
+function addMessage(text, sender) {
+
+    const message = document.createElement("div");
+
+    message.className = "message " + sender;
+    message.textContent = text;
+
+    messages.appendChild(message);
+
+    messages.scrollTop = messages.scrollHeight;
+}
+
+
+function showButtons(options) {
+
+    buttons.innerHTML = "";
+
+    options.forEach(option => {
+
+        const button = document.createElement("button");
+
+        button.textContent = option.text;
+
+        button.onclick = () => {
+
+            addMessage(option.text, "user");
+
+            option.action();
+
+        };
+
+        buttons.appendChild(button);
+
+    });
+}
+
+
+function mainMenu() {
+
+    addMessage(
+        "Здравствуйте! Что вы хотите сделать?",
+        "bot"
+    );
+
+    showButtons([
+
+        {
+            text: "Узнать информацию",
+            action: information
+        },
+
+        {
+            text: "Получить помощь",
+            action: help
+        },
+
+        {
+            text: "Задать вопрос",
+            action: question
+        },
+
+        {
+            text: "Главное меню",
+            action: mainMenu
+        }
+
+    ]);
+}
+
+
+function information() {
+
+    addMessage(
+        "Здесь будет запрограммированная информация.",
+        "bot"
+    );
+
+    showButtons([
+
+        {
+            text: "Подробнее",
+            action: details
+        },
+
+        {
+            text: "Главное меню",
+            action: mainMenu
+        }
+
+    ]);
+}
+
+
+function details() {
+
+    addMessage(
+        "Здесь мы разместим нужный тебе текст.",
+        "bot"
+    );
+
+    showButtons([
+
+        {
+            text: "Главное меню",
+            action: mainMenu
+        }
+
+    ]);
+}
+
+
+function help() {
+
+    addMessage(
+        "Опишите, какая помощь вам нужна.",
+        "bot"
+    );
+
+    showButtons([
+
+        {
+            text: "Главное меню",
+            action: mainMenu
+        }
+
+    ]);
+}
+
+
+function question() {
+
+    addMessage(
+        "Напишите свой вопрос в поле ниже.",
+        "bot"
+    );
+
+    buttons.innerHTML = "";
+
+}
+
+
+function sendMessage() {
+
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    addMessage(text, "user");
+
+    input.value = "";
+
+    setTimeout(() => {
+
+        addMessage(
+            "Ваше сообщение получено. Позже мы запрограммируем, как бот должен на него отвечать.",
+            "bot"
+        );
+
+        showButtons([
+
+            {
+                text: "Главное меню",
+                action: mainMenu
+            }
+
+        ]);
+
+    }, 500);
+
+}
+
+
+input.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+
+        sendMessage();
+
+    }
+
+});
+
+
+mainMenu();
+
+</script>
+
+</body>
+</html>
