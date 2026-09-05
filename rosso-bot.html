@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Чат с TIGRE</title>
+</head>
+<body>
+<script src="//code.tidio.co/jsmc5thdlrfoqowzcau2lkylc8ebiiet.js" async></script>
+<script>
+(function() {
+  function onTidioChatApiReady() {
+    window.tidioChatApi.open();
+  }
+  if (window.tidioChatApi) {
+    window.tidioChatApi.on("ready", onTidioChatApiReady);
+  } else {
+    document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+  }
+})();
+</script>
+</body>
+</html>
